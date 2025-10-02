@@ -1,7 +1,7 @@
-import { supabase } from "@/lib/supabaseClient";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { supabase } from "@/lib/supabaseClient";
 
 // Utility to update local projects file
 async function updateProjectsFile() {
@@ -28,14 +28,12 @@ async function updateProjectsFile() {
   fs.writeFileSync(filePath, fileContent);
 }
 
-// PUT handler
-export async function PUT(
-  req: NextRequest,
-  context: { params: Record<string, string> } // <-- Generic record
-) {
+// ---------------------- PUT handler ----------------------
+export async function PUT(req: NextRequest, context: any) {
   try {
-    const { params } = context;
-    const projectId = params.id; // safely get the id
+    // await params if it's a promise
+    const params = await context.params; 
+    const projectId = params.id as string;
 
     const formData = await req.formData();
     const title = formData.get("title") as string;
