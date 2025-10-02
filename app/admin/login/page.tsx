@@ -12,8 +12,8 @@ export default function AdminLoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const adminUser = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
-    const adminPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    const adminUser = process.env.ADMIN_USERNAME;
+    const adminPass = process.env.ADMIN_PASSWORD;
 
     if (username === adminUser && password === adminPass) {
       // Save session in sessionStorage (clears on browser close)
