@@ -15,7 +15,7 @@ export const blogs = [
   },
   {
     "id": 8,
-    "title": "The Journey of a full stack developer: Code",
+    "title": "The Journey of a full stack developer: Coding",
     "content": "This is just the beginning, stay tuned for more awesome stuff!! Send suggestions on what to build next.",
     "cover_url": null,
     "created_at": "2025-10-03T21:29:12.183234+00:00"

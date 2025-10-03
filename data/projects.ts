@@ -16,19 +16,19 @@ export const projects = [
     ]
   },
   {
-    "id": "7a52bee1-ccbe-4bc8-bab6-3736ccaa10a0",
-    "title": "Grace Tasty Bites",
-    "description": "MOBILE APPLICATION",
-    "images": [
-      "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/7a52bee1-ccbe-4bc8-bab6-3736ccaa10a0/3.jpg"
-    ]
-  },
-  {
     "id": "70cf9cc1-d178-4ad2-8ce3-397b26a41456",
     "title": "Library Management System",
     "description": "DESKTOP APPLICATION",
     "images": [
       "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/70cf9cc1-d178-4ad2-8ce3-397b26a41456/21.jpg"
+    ]
+  },
+  {
+    "id": "7a52bee1-ccbe-4bc8-bab6-3736ccaa10a0",
+    "title": "Grace Tasty Bites ",
+    "description": "MOBILE APPLICATION",
+    "images": [
+      "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/7a52bee1-ccbe-4bc8-bab6-3736ccaa10a0/3.jpg"
     ]
   }
 ];

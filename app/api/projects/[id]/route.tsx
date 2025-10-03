@@ -29,17 +29,22 @@ async function updateProjectsFile() {
 }
 
 // ---------------------- PUT handler ----------------------
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> } // <- params is now a Promise
+) {
   try {
-    const projectId = params.id;
-
+    const { id: projectId } = await context.params; // unwrap params
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const files = formData.getAll("images") as File[];
 
     if (!title || !description) {
-      return NextResponse.json({ error: "Title and description are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Title and description are required" },
+        { status: 400 }
+      );
     }
 
     let imageUrls: string[] = [];
@@ -50,13 +55,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         .from("projects")
         .upload(filePath, file, { cacheControl: "3600", upsert: true });
 
-      if (uploadError) continue;
-
-      const { data: urlData } = supabase.storage
-        .from("projects")
-        .getPublicUrl(uploadData.path);
-
-      imageUrls.push(urlData.publicUrl);
+      if (!uploadError && uploadData?.path) {
+        const { data: urlData } = supabase.storage
+          .from("projects")
+          .getPublicUrl(uploadData.path);
+        imageUrls.push(urlData.publicUrl);
+      }
     }
 
     const { data: updatedProject, error: updateError } = await supabase
@@ -67,7 +71,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       .single();
 
     if (updateError) {
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
+      return NextResponse.json(
+        { error: updateError.message },
+        { status: 500 }
+      );
     }
 
     if (imageUrls.length > 0) {
@@ -77,11 +84,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     await updateProjectsFile();
-    await supabase.from("activity_log").insert([{ message: `Updated project "${title}"` }]);
+    await supabase
+      .from("activity_log")
+      .insert([{ message: `Updated project "${title}"` }]);
 
     return NextResponse.json({ ...updatedProject, images: imageUrls });
   } catch (err: any) {
     console.error(err);
-    return NextResponse.json({ error: err.message || "Something went wrong" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Something went wrong" },
+      { status: 500 }
+    );
   }
 }
