@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 import fs from "fs";
 import path from "path";
 
-// Optional: Update local blogs file for SSR/static usage
+// Optional: Update local blogs file
 async function updateBlogsFile() {
   const { data, error } = await supabase
     .from("blogs")
@@ -16,13 +16,13 @@ async function updateBlogsFile() {
   fs.writeFileSync(filePath, fileContent);
 }
 
-// ---------------------- GET handler ----------------------
+// ---------------------- GET ----------------------
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } } // ✅ correct typing
+  context: { params: Promise<{ id: string }> } // <- params is now a Promise
 ) {
   try {
-    const blogId = context.params.id;
+    const { id: blogId } = await context.params; // unwrap the promise
     const { data, error } = await supabase
       .from("blogs")
       .select("*")
@@ -40,13 +40,13 @@ export async function GET(
   }
 }
 
-// ---------------------- PUT handler ----------------------
+// ---------------------- PUT ----------------------
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } } // ✅ correct typing
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blogId = context.params.id;
+    const { id: blogId } = await context.params;
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
@@ -104,13 +104,13 @@ export async function PUT(
   }
 }
 
-// ---------------------- DELETE handler ----------------------
+// ---------------------- DELETE ----------------------
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blogId = context.params.id;
+    const { id: blogId } = await context.params;
     const { error } = await supabase.from("blogs").delete().eq("id", blogId);
 
     if (error) throw error;
