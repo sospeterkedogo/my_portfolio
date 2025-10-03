@@ -17,9 +17,12 @@ async function updateBlogsFile() {
 }
 
 // ---------------------- GET handler ----------------------
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } } // ✅ correct typing
+) {
   try {
-    const blogId = params.id;
+    const blogId = context.params.id;
     const { data, error } = await supabase
       .from("blogs")
       .select("*")
@@ -30,21 +33,30 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json(data);
   } catch (err: any) {
     console.error(err);
-    return NextResponse.json({ error: err.message || "Failed to fetch blog" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Failed to fetch blog" },
+      { status: 500 }
+    );
   }
 }
 
 // ---------------------- PUT handler ----------------------
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } } // ✅ correct typing
+) {
   try {
-    const blogId = params.id;
+    const blogId = context.params.id;
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
     const file = formData.get("image") as File | null;
 
     if (!title || !content) {
-      return NextResponse.json({ error: "Title and content are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Title and content are required" },
+        { status: 400 }
+      );
     }
 
     let coverUrl: string | null = null;
@@ -71,18 +83,49 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       .single();
 
     if (updateError) {
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
+      return NextResponse.json(
+        { error: updateError.message },
+        { status: 500 }
+      );
     }
 
-    // Optional: update local blogs file for static usage
     await updateBlogsFile();
-
-    // Optional: log activity
-    await supabase.from("activity_log").insert([{ message: `Updated blog "${title}"` }]);
+    await supabase
+      .from("activity_log")
+      .insert([{ message: `Updated blog "${title}"` }]);
 
     return NextResponse.json(updatedBlog);
   } catch (err: any) {
     console.error(err);
-    return NextResponse.json({ error: err.message || "Failed to update blog" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Failed to update blog" },
+      { status: 500 }
+    );
+  }
+}
+
+// ---------------------- DELETE handler ----------------------
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  try {
+    const blogId = context.params.id;
+    const { error } = await supabase.from("blogs").delete().eq("id", blogId);
+
+    if (error) throw error;
+
+    await updateBlogsFile();
+    await supabase
+      .from("activity_log")
+      .insert([{ message: `Deleted blog ID "${blogId}"` }]);
+
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    console.error(err);
+    return NextResponse.json(
+      { error: err.message || "Failed to delete blog" },
+      { status: 500 }
+    );
   }
 }

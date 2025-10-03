@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import Navbar from '../components/NavBar';
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   subsets: ["latin"],
