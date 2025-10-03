@@ -63,22 +63,36 @@ export default function ProjectPage({ params: { id } }: ProjectPageProps) {
   }
 
   return (
-    <main className="max-w-4xl mx-auto p-6 mt-20">
-      <h1 className="text-4xl font-bold mb-6 text-blue-400">{project.title}</h1>
-      <p className="text-white mb-6">{project.description}</p>
+    <main className="min-h-screen bg-[#1c1c1c] text-white py-20 px-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Title */}
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-400 tracking-wide">
+          {project.title}
+        </h1>
 
-      {project.images.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {project.images.map((image, idx) => (
-            <img
-              key={idx}
-              src={image}
-              alt={`${project.title} image ${idx + 1}`}
-              className="rounded shadow-md w-full h-auto object-cover"
-            />
-          ))}
-        </div>
-      )}
+        {/* Description */}
+        <p className="text-gray-200 text-lg md:text-xl mb-10 leading-relaxed">
+          {project.description}
+        </p>
+
+        {/* Images */}
+        {project.images.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {project.images.map((image, idx) => (
+              <div
+                key={idx}
+                className="overflow-hidden shadow-lg bg-[#222222]"
+              >
+                <img
+                  src={image}
+                  alt={`${project.title} image ${idx + 1}`}
+                  className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }

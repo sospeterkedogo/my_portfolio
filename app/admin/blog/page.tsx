@@ -68,7 +68,15 @@ export default function BlogsAdminPage() {
 
   return (
     <main className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-white">Manage Blogs</h1>
+      <div className="flex justify-between items-center mb-6 mt-6">
+        <h1 className="text-3xl font-bold">Manage Blogs</h1>
+        <button
+          onClick={() => router.push("/admin/blog/new")}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Add New Blog
+        </button>
+      </div>
 
       {blogs.length === 0 && <p className="text-gray-500">No blogs yet.</p>}
 

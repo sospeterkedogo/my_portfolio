@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 type Blog = {
   id: string;
@@ -10,79 +11,93 @@ type Blog = {
   cover_url?: string | null;
 };
 
-type PageProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function EditBlogPage({ params: { id } }: PageProps) {
+export default function EditBlogPage() {
   const router = useRouter();
+  const params = useParams(); // expects URL like /admin/blog/edit/[id]
+  const blogId = params?.id as string;
+
   const [loading, setLoading] = useState(true);
-  const [blog, setBlog] = useState<Blog | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Form state
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [saving, setSaving] = useState(false);
 
-  // Auth check
+  // ----------- Auth check and fetch blog -----------
   useEffect(() => {
     const loggedIn = sessionStorage.getItem("adminLoggedIn");
-    if (!loggedIn) router.push("/admin/login");
-  }, [router]);
+    if (!loggedIn) {
+      router.push("/admin/login");
+      return;
+    }
 
-  // Fetch blog data
-  useEffect(() => {
-    async function fetchBlog() {
+    const fetchBlog = async () => {
       try {
-        const res = await fetch("/api/blogs");
-        const data = await res.json();
-        const b = data.find((b: Blog) => String(b.id) === id);
-        if (!b) {
-          router.push("/admin/blog");
-          return;
+        const { data, error } = await supabase
+          .from("blogs")
+          .select("title, content")
+          .eq("id", blogId)
+          .single();
+
+        if (error) throw error;
+        if (data) {
+          setTitle(data.title);
+          setContent(data.content);
+          setImage(null); // Reset image upload field
         }
-        setBlog(b);
-        setTitle(b.title);
-        setContent(b.content);
-      } catch (err) {
+      } catch (err: any) {
         console.error(err);
+        setError(err.message || "Failed to fetch blog");
       } finally {
         setLoading(false);
       }
-    }
-    fetchBlog();
-  }, [id, router]);
+    };
 
+    if (blogId) fetchBlog();
+  }, [blogId, router]);
+
+  // ----------- Handle file input -----------
   const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files && e.target.files[0]) setImage(e.target.files[0]);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // ----------- Save edits -----------
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setSaving(true);
-
-    const formData = new FormData();
-    formData.append("id", String(id));
-    formData.append("title", title);
-    formData.append("content", content);
-    if (image) formData.append("image", image);
+    setError("");
+    setSuccess("");
 
     try {
-      const res = await fetch("/api/blogs", {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      if (image) formData.append("image", image);
+
+      const res = await fetch(`/api/blogs/${blogId}`, {
         method: "PUT",
         body: formData,
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to update blog");
+        let errorMessage = "Failed to update blog";
+        try {
+          const data = await res.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          errorMessage += `: Server returned status ${res.status}`;
+        }
+        throw new Error(errorMessage);
       }
 
-      router.push("/admin/blog"); // back to Manage Blogs
+      setSuccess("Blog updated successfully!");
+      setTimeout(() => router.push("/admin/blog"), 500);
+
     } catch (err: any) {
-      console.error(err);
-      alert(err.message);
+      setError(err.message);
     } finally {
       setSaving(false);
     }
@@ -93,6 +108,9 @@ export default function EditBlogPage({ params: { id } }: PageProps) {
   return (
     <main className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Edit Blog</h1>
+
+      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {success && <p className="text-green-600 mb-4">{success}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -118,7 +136,9 @@ export default function EditBlogPage({ params: { id } }: PageProps) {
         <button
           type="submit"
           disabled={saving}
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+          className={`bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 ${
+            saving ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {saving ? "Saving..." : "Update Blog"}
         </button>

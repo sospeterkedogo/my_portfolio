@@ -26,7 +26,7 @@ export default function Home() {
         </div>
 
         <Link href="/projects" passHref>
-          <button className="text-white opacity-10 hover:text-blue-700 font-semibold">
+          <button className="text-gray-400 opacity-50 hover:text-blue-700 font-semibold">
             All Projects
           </button>
         </Link>

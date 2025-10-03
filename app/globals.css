@@ -1,2 +1,33 @@
 @import "tailwindcss";
 
+
+@keyframes fadeIn {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* globals.css or tailwind.css */
+
+/* Slide in from top */
+@keyframes slideIn {
+  0% { transform: translateY(-100%); opacity: 0 }
+  100% { transform: translateY(0); opacity: 1 }
+}
+
+/* Slide out to top */
+@keyframes slideOut {
+  0% { transform: translateY(0); opacity: 1 }
+  100% { transform: translateY(-100%); opacity: 0 }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease forwards;
+}
+
+.animate-slide-out {
+  animation: slideOut 0.4s ease forwards;
+}

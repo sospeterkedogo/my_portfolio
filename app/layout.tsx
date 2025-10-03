@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "My Next.js Portfolio",
+  description: "My Portfolio",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

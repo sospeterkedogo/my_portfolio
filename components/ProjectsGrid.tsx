@@ -54,7 +54,7 @@ export default function ProjectsGrid() {
                 />
               )}
             </div>
-            <div className="p-4 bg-gray-900">
+            <div className="p-4 bg-[#2a2a2a]">
               <h3 className="text-lg font-semibold text-white truncate">{project.title}</h3>
               <p className="text-gray-400 text-sm line-clamp-2">{project.description}</p>
             </div>

@@ -41,13 +41,14 @@ export default function HeroSection() {
       width: 100%;
       text-align: center;
       opacity: 0;
-      animation: flipFade 16s ease-in-out infinite;
+      animation: flipFade 10s ease-in-out infinite;
     }
 
     .flip-line:nth-child(1) { animation-delay: 0s; }
-    .flip-line:nth-child(2) { animation-delay: 4s; }
-    .flip-line:nth-child(3) { animation-delay: 8s; }
-    .flip-line:nth-child(4) { animation-delay: 12s; }
+    .flip-line:nth-child(2) { animation-delay: 2s; }
+    .flip-line:nth-child(3) { animation-delay: 4s; }
+    .flip-line:nth-child(4) { animation-delay: 6s; }
+    .flip-line:nth-child(5) { animation-delay: 8s; }
   `}
 </style>
 
@@ -56,7 +57,7 @@ export default function HeroSection() {
     style={{
       fontFamily: "var(--font-inter)",
       fontWeight: 800,
-      fontSize: "clamp(2rem, 8vw, 7rem)", 
+      fontSize: "clamp(3.5rem, 12vw, 7rem)", 
       color: "white",
       textTransform: "uppercase",
       letterSpacing: "0.05em",
@@ -69,6 +70,7 @@ export default function HeroSection() {
     <div className="flip-line">I AM A</div>
     <div className="flip-line">DESIGNER</div>
     <div className="flip-line">DEVELOPER</div>
+    <div className="flip-line">PENTESTER</div>
   </div>
 </section>
 

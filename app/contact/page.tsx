@@ -33,55 +33,88 @@ export default function ContactPage() {
   };
 
   return (
-    <section className="w-full max-w-2xl mx-auto px-6 py-12">
-      <h2 className="font-[var(--font-inter)] text-3xl font-bold mb-6 text-gray-800">
-        Contact Me
-      </h2>
+    <section className="w-full px-4 sm:px-8 md:px-16 lg:px-60 py-16  text-white bg-[#1c1c1c]">
+      {/* Header */}
+      <div className=" mb-10">
+        <h2 className="text-4xl font-bold tracking-wide mb-4 text-center">
+          Let’s Connect
+        </h2>
+        <p className="text-gray-300 text-lg leading-relaxed">
+          Have an idea, a project, or just want to say hello?  
+          I’m always excited to collaborate and bring creative visions to life.  
+          Whether it’s building a sleek web app, discussing design strategy, or exploring new opportunities I’d love to hear from you.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      {/* Contact Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-transparent  space-y-6"
+      >
+        <div className="grid gap-2 md:grid-cols-2">
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+            className="bg-transparent border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="bg-transparent border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+        </div>
+
         <textarea
           name="message"
           placeholder="Your Message"
           value={form.message}
           onChange={handleChange}
           required
-          rows={5}
-          className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          rows={6}
+          className="w-full bg-transparent border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
         />
 
         <button
           type="submit"
           disabled={status === "loading"}
-          className="bg-blue-600 text-white font-medium py-3 rounded-lg hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-cyan-500 transition disabled:opacity-50"
         >
           {status === "loading" ? "Sending..." : "Send Message"}
         </button>
 
+        {/* Status messages */}
         {status === "success" && (
-          <p className="text-green-600 mt-2">✅ Message sent successfully!</p>
+          <p className="text-green-400 mt-2 text-center">
+            ✅ Message sent successfully! I’ll get back to you soon.
+          </p>
         )}
         {status === "error" && (
-          <p className="text-red-600 mt-2">❌ Something went wrong. Try again.</p>
+          <p className="text-red-400 mt-2 text-center">
+            ❌ Something went wrong. Please try again later.
+          </p>
         )}
       </form>
+
+      {/* Extra content after form */}
+      <div className="text-center mt-12 text-gray-400 text-sm">
+        <p>
+          Prefer direct contact? You can also reach me at{" "}
+          <a
+            href="mailto:kedogosospeter36@email.com"
+            className="text-gray-600 hover:underline"
+          >
+            kedogosospeter36@email.com
+          </a>
+        </p>
+      </div>
     </section>
   );
 }

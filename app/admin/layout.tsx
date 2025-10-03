@@ -19,21 +19,23 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="flex min-h-screen bg-[#1c1c1c] text-gray-100 transition-colors">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-xl z-40 transform transition-transform duration-300 
+        className={`fixed top-0 left-0 h-full w-64 bg-[#272727] shadow-xl z-40 transform transition-transform duration-300 
         ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} md:translate-x-0`}
       >
-        <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-          <h1 className="text-lg font-bold tracking-tight">Admin Panel</h1>
+        <div className="flex items-center justify-between p-6 border-gray-700">
+          
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="md:hidden p-2 rounded hover:bg-gray-800"
           >
             ✕
           </button>
         </div>
+
+        {/* Navigation */}
         <nav className="mt-6 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -42,12 +44,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg mx-2 transition 
-                ${
-                  active
-                    ? "bg-blue-600 text-white shadow"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 mx-3 rounded-lg transition 
+                  ${active
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  }`}
               >
                 <Icon size={18} />
                 {item.name}
@@ -56,11 +57,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t dark:border-gray-700 flex justify-between items-center">
+        {/* Bottom Actions */}
+        <div className="absolute bottom-0 w-full p-4 border-t border-gray-700 flex justify-between items-center">
           {/* Dark mode toggle */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-800"
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             {theme === "dark" ? "Light" : "Dark"}
@@ -72,20 +74,19 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
       {/* Main Content */}
       <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        {/* Top Bar (mobile only) */}
-        <header className="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm flex items-center justify-between p-4 md:hidden">
-          <h2 className="font-semibold">Admin</h2>
+        {/* Top Bar (mobile) */}
+        <header className="sticky top-0 z-30 bg-[#1c1c1c] shadow-sm flex items-center justify-between p-4 md:hidden">
+          <h2 className="font-semibold text-white">Admin</h2>
           <div className="flex items-center gap-3">
-            {/* Dark mode toggle in mobile navbar */}
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="p-2 rounded hover:bg-gray-800"
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="p-2 rounded hover:bg-gray-800"
             >
               ☰
             </button>
@@ -93,7 +94,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 bg-[#1c1c1c]">
+          {children}
+        </main>
       </div>
     </div>
   );
