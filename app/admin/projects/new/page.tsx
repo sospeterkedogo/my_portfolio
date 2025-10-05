@@ -4,7 +4,10 @@ import { useState } from "react";
 
 export default function NewProjectPage() {
   const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
+  const [codeUrl, setCodeUrl] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -19,7 +22,10 @@ export default function NewProjectPage() {
     try {
       const formData = new FormData();
       formData.append("title", title);
+      formData.append("summary", summary);
       formData.append("description", description);
+      formData.append("code_url", codeUrl);
+      formData.append("demo_url", demoUrl);
       images.forEach((img) => formData.append("images", img));
 
       const res = await fetch("/api/projects", {
@@ -28,14 +34,17 @@ export default function NewProjectPage() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to add project");
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Server returned status ${res.status}`);
       }
 
       const newProject = await res.json();
       setSuccessMessage(`Project "${newProject.title}" added successfully!`);
       setTitle("");
+      setSummary("");
       setDescription("");
+      setCodeUrl("");
+      setDemoUrl("");
       setImages([]);
     } catch (err: any) {
       setErrorMessage(err.message);
@@ -68,6 +77,13 @@ export default function NewProjectPage() {
           className="w-full p-2 border border-gray-400 rounded"
           required
         />
+        <input
+          type="text"
+          placeholder="Project Summary"
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
         <textarea
           placeholder="Project Description"
           value={description}
@@ -76,16 +92,24 @@ export default function NewProjectPage() {
           rows={4}
           required
         />
+        <input
+          type="url"
+          placeholder="Code URL (GitHub)"
+          value={codeUrl}
+          onChange={(e) => setCodeUrl(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
+        <input
+          type="url"
+          placeholder="Live Demo URL"
+          value={demoUrl}
+          onChange={(e) => setDemoUrl(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
 
         <div>
           <label className="block mb-2 font-medium">Upload Images</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="w-full"
-          />
+          <input type="file" accept="image/*" multiple onChange={handleImageChange} className="w-full" />
           {images.length > 0 && (
             <ul className="mt-2 text-sm text-gray-600">
               {images.map((file, idx) => (

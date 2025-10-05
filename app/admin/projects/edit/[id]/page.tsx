@@ -2,18 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 
 type Project = {
   id: string;
   title: string;
+  summary?: string;
   description: string;
   images?: string[];
+  code_url?: string;
+  demo_url?: string;
 };
 
 export default function EditProjectPage() {
   const router = useRouter();
-  const params = useParams(); // expects URL like /admin/projects/edit/[id]
+  const params = useParams(); // expects /admin/projects/edit/[id]
   const projectId = params?.id as string;
 
   const [loading, setLoading] = useState(true);
@@ -23,30 +26,40 @@ export default function EditProjectPage() {
 
   // Form state
   const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
+  const [codeUrl, setCodeUrl] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const supabase = createClient();
 
-  // ----------- Auth check and fetch project -----------
+  // Fetch project
   useEffect(() => {
-    const loggedIn = sessionStorage.getItem("adminLoggedIn");
-    if (!loggedIn) {
-      router.push("/admin/login");
-      return;
-    }
 
     const fetchProject = async () => {
       try {
         const { data, error } = await supabase
           .from("projects")
-          .select("title, description") // Only select what's needed
+          .select(`
+            title,
+            summary,
+            description,
+            code_url,
+            demo_url,
+            project_images(url)
+          `)
           .eq("id", projectId)
           .single();
 
         if (error) throw error;
+
         if (data) {
           setTitle(data.title);
+          setSummary(data.summary || "");
           setDescription(data.description);
-          setImages([]); // Reset new uploads state on load
+          setCodeUrl(data.code_url || "");
+          setDemoUrl(data.demo_url || "");
+          setImages([]); // Reset new uploads
         }
       } catch (err: any) {
         console.error(err);
@@ -59,12 +72,11 @@ export default function EditProjectPage() {
     if (projectId) fetchProject();
   }, [projectId, router]);
 
-  // ----------- Handle file input -----------
+  // Fixed handleImageChange
   const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target.files) setImages(Array.from(e.target.files));
+    setImages((prev) => [...prev, ...(Array.from(e.target.files ?? []))]);
   };
 
-  // ----------- Save edits -----------
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -74,37 +86,25 @@ export default function EditProjectPage() {
     try {
       const formData = new FormData();
       formData.append("title", title);
+      formData.append("summary", summary);
       formData.append("description", description);
-      if (images.length > 0) images.forEach((img) => formData.append("images", img));
+      formData.append("code_url", codeUrl);
+      formData.append("demo_url", demoUrl);
+      formData.append("id", projectId);
+      images.forEach((img) => formData.append("images", img));
 
-      const res = await fetch(`/api/projects/${projectId}`, {
+      const res = await fetch("/api/projects", {
         method: "PUT",
         body: formData,
       });
 
       if (!res.ok) {
-        // Handle server errors that return JSON or otherwise
-        let errorMessage = "Failed to update project";
-        try {
-          const data = await res.json();
-          errorMessage = data.error || errorMessage;
-        } catch (jsonError) {
-          // If response is not JSON (e.g., HTML error page), use generic message
-          errorMessage += `: Server returned status ${res.status}`;
-        }
-        throw new Error(errorMessage);
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Server returned status ${res.status}`);
       }
 
-      // Success path - Server must return a 2xx status.
-      // We don't need to await res.json() again since the data isn't used
-      // and this avoids the reported JSON parsing error in the success path.
-
       setSuccess("Project updated successfully!");
-      // Use a brief delay before redirecting to allow success message to flash
-      setTimeout(() => {
-        router.push("/admin/projects");
-      }, 500);
-
+      setTimeout(() => router.push("/admin/projects"), 500);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -130,6 +130,13 @@ export default function EditProjectPage() {
           className="w-full p-2 border border-gray-400 rounded"
           required
         />
+        <input
+          type="text"
+          placeholder="Project Summary"
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
         <textarea
           placeholder="Project Description"
           value={description}
@@ -138,15 +145,24 @@ export default function EditProjectPage() {
           rows={4}
           required
         />
+        <input
+          type="url"
+          placeholder="Code URL (GitHub)"
+          value={codeUrl}
+          onChange={(e) => setCodeUrl(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
+        <input
+          type="url"
+          placeholder="Live Demo URL"
+          value={demoUrl}
+          onChange={(e) => setDemoUrl(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded"
+        />
+
         <div>
           <label className="block mb-1 font-medium">Upload Images</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="w-full"
-          />
+          <input type="file" accept="image/*" multiple onChange={handleImageChange} className="w-full" />
           {images.length > 0 && (
             <ul className="mt-2 text-sm text-gray-600">
               {images.map((file, idx) => (
@@ -155,6 +171,7 @@ export default function EditProjectPage() {
             </ul>
           )}
         </div>
+
         <button
           type="submit"
           disabled={saving}

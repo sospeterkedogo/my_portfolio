@@ -1,8 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+// app/admin/page.tsx
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 type Activity = {
   id: string;
@@ -29,63 +27,26 @@ function AdminTile({ title, count, icon, color = "bg-blue-500" }: TileProps) {
   );
 }
 
-export default function AdminDashboard() {
-  const router = useRouter();
+export default async function AdminDashboardPage() {
+  const supabase = await createClient();
 
-  // ----------- Hooks MUST be at the top -----------
-  const [loading, setLoading] = useState(true);
-  const [projectsCount, setProjectsCount] = useState(0);
-  const [blogsCount, setBlogsCount] = useState(0);
-  const [usersCount, setUsersCount] = useState(0);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [visibleCount, setVisibleCount] = useState(7);
+  // ----------- Server-side auth check -----------
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
-  // ----------- Auth check -----------
-  useEffect(() => {
-    const loggedIn = sessionStorage.getItem("adminLoggedIn");
-    if (!loggedIn) {
-      router.push("/admin/login");
-    } else {
-      setLoading(false);
-    }
-  }, [router]);
+  if (authError || !user) {
+    redirect("/login");
+  }
 
-  // ----------- Data fetching -----------
-  useEffect(() => {
-    if (!loading) {
-      const fetchCounts = async () => {
-        const { count: projCount } = await supabase
-          .from("projects")
-          .select("id", { count: "exact" });
-        setProjectsCount(projCount || 0);
-
-        const { count: blogCount } = await supabase
-          .from("blogs")
-          .select("id", { count: "exact" });
-        setBlogsCount(blogCount || 0);
-
-        const { count: userCount } = await supabase
-          .from("users")
-          .select("id", { count: "exact" });
-        setUsersCount(userCount || 0);
-      };
-
-      const fetchActivities = async () => {
-        const { data, error } = await supabase
-          .from("activity_log")
-          .select("*")
-          .order("timestamp", { ascending: false })
-          .limit(50);
-        if (!error && data) setActivities(data);
-      };
-
-      fetchCounts();
-      fetchActivities();
-    }
-  }, [loading]);
-
-  if (loading)
-    return <p className="text-white text-center mt-20">Checking authentication...</p>;
+  // ----------- Fetch counts and activities -----------
+  const [{ count: projectsCount }, { count: blogsCount }, { count: usersCount }, { data: activities }] = await Promise.all([
+    supabase.from("projects").select("id", { count: "exact" }),
+    supabase.from("blogs").select("id", { count: "exact" }),
+    supabase.from("users").select("id", { count: "exact" }),
+    supabase.from<any, Activity>("activity_log").select("*").order("timestamp" as keyof Activity, { ascending: false }).limit(50),
+  ]);
 
   return (
     <div className="p-6 space-y-8">
@@ -93,16 +54,16 @@ export default function AdminDashboard() {
 
       {/* Tiles */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <AdminTile title="Projects" count={projectsCount} icon="📁" color="bg-blue-500" />
-        <AdminTile title="Blogs" count={blogsCount} icon="📝" color="bg-green-500" />
-        <AdminTile title="Users" count={usersCount} icon="👤" color="bg-purple-500" />
+        <AdminTile title="Projects" count={projectsCount || 0} icon="📁" color="bg-blue-500" />
+        <AdminTile title="Blogs" count={blogsCount || 0} icon="📝" color="bg-green-500" />
+        <AdminTile title="Users" count={usersCount || 0} icon="👤" color="bg-purple-500" />
       </div>
 
       {/* Recent Activity */}
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow">
         <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
         <ul className="space-y-2 max-h-[400px] overflow-y-auto">
-          {activities.slice(0, visibleCount).map((act) => (
+          {activities?.map((act) => (
             <li
               key={act.id}
               className="flex justify-between text-gray-700 dark:text-gray-300"
@@ -114,14 +75,6 @@ export default function AdminDashboard() {
             </li>
           ))}
         </ul>
-        {visibleCount < activities.length && (
-          <button
-            onClick={() => setVisibleCount((prev) => prev + 7)}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Show More
-          </button>
-        )}
       </div>
     </div>
   );

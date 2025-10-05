@@ -10,12 +10,6 @@ export default function NewBlogPage() {
   const [image, setImage] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
-  // Auth check
-  useEffect(() => {
-    const loggedIn = sessionStorage.getItem("adminLoggedIn");
-    if (!loggedIn) router.push("/admin/login");
-  }, [router]);
-
   const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files && e.target.files[0]) setImage(e.target.files[0]);
   };

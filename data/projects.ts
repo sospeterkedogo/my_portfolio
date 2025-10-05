@@ -8,14 +8,6 @@ export const projects = [
     ]
   },
   {
-    "id": "a0aded75-de55-4bd1-989c-f7207180273a",
-    "title": "News Portal",
-    "description": "WEB APPLICATION",
-    "images": [
-      "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/a0aded75-de55-4bd1-989c-f7207180273a/18.jpg"
-    ]
-  },
-  {
     "id": "70cf9cc1-d178-4ad2-8ce3-397b26a41456",
     "title": "Library Management System",
     "description": "DESKTOP APPLICATION",
@@ -29,6 +21,15 @@ export const projects = [
     "description": "MOBILE APPLICATION",
     "images": [
       "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/7a52bee1-ccbe-4bc8-bab6-3736ccaa10a0/3.jpg"
+    ]
+  },
+  {
+    "id": "a0aded75-de55-4bd1-989c-f7207180273a",
+    "title": "News Portal",
+    "description": "WEB APPLICATION",
+    "images": [
+      "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/a0aded75-de55-4bd1-989c-f7207180273a/18.jpg",
+      "https://fzvhcnkrrjeedkhqdsgw.supabase.co/storage/v1/object/public/projects/a0aded75-de55-4bd1-989c-f7207180273a/APP%20module%20-%20Card.jpg"
     ]
   }
 ];

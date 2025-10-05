@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import { useParams } from "next/navigation";
+
+const supabase = createClient();
 
 type Blog = {
   id: string;

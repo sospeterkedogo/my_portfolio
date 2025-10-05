@@ -48,7 +48,7 @@ export default function Navbar() {
       </button>
 
       {/* Links for desktop */}
-      <ul className="hidden lg:flex gap-8 text-white font-medium text-lg">
+      <ul className="hidden lg:flex gap-8 text-white text-xl">
         {navLinks.map((link) => (
           <li key={link.href}>
             <Link href={link.href} className="hover:text-cyan-300 transition">

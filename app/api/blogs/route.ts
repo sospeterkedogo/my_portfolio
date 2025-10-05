@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
 
 // Helper to log activity
 async function logActivity(message: string) {
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// ---------------------- GET ----------------------
 export async function GET() {
   try {
     const { data, error } = await supabase

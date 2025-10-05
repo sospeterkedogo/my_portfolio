@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 
 type Blog = {
   id: string;
@@ -25,15 +25,11 @@ export default function EditBlogPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const supabase = createClient();
 
-  // ----------- Auth check and fetch blog -----------
+  // ----------- fetch blog -----------
   useEffect(() => {
-    const loggedIn = sessionStorage.getItem("adminLoggedIn");
-    if (!loggedIn) {
-      router.push("/admin/login");
-      return;
-    }
-
+    
     const fetchBlog = async () => {
       try {
         const { data, error } = await supabase
@@ -73,6 +69,7 @@ export default function EditBlogPage() {
 
     try {
       const formData = new FormData();
+      formData.append("id", blogId);
       formData.append("title", title);
       formData.append("content", content);
       if (image) formData.append("image", image);

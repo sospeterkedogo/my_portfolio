@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import { NextApiRequest, NextApiResponse } from "next";
+
+const supabase = createClient();
 
 interface ProjectImage {
     url: string;

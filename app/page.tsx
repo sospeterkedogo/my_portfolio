@@ -17,10 +17,10 @@ export default function Home() {
       <section id="projects" className="w-full max-w-7xl mx-auto px-6 py-12">
         <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="font-[var(--font-inter)] text-sm font-bold uppercase tracking-wide text-white opacity-50">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-white opacity-50">
             CHECK IT OUT
           </h2>
-          <h2 className="font-[var(--font-inter)] text-3xl font-bold uppercase tracking-wide text-white">
+          <h2 className="text-3xl font-bold uppercase tracking-wide text-white">
             FEATURED PROJECTS
           </h2>
         </div>

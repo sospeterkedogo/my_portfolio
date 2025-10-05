@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
 
 type Project = {
   id: number;
@@ -46,14 +48,14 @@ export default function AllProjectsPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#121212] px-6 py-16">
+    <main className="min-h-screen bg-[#121212] w-full px-4 sm:px-8 md:px-16 lg:px-60 py-16">
       <div className="max-w-5xl mx-auto">
         {/* Page Title */}
-        <div className="mb-1">
+        <div className="mb-1 mt-10">
           <h1 className="text-4xl font-bold text-white tracking-tight">
-            All Projects
+            Projects
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-400 text-sm">
             A showcase of selected works and experiments.
           </p>
         </div>
@@ -63,7 +65,7 @@ export default function AllProjectsPage() {
         ) : projects.length === 0 ? (
           <p className="text-gray-400 text-lg">No projects yet.</p>
         ) : (
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-5">
             {projects.map((project) => (
               <Link href={`/projects/${project.id}`} key={project.id} passHref>
                 <div className="group relative w-full overflow-hidden shadow-lg bg-black cursor-pointer">
@@ -85,8 +87,8 @@ export default function AllProjectsPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition"></div>
 
                   {/* Text Content */}
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white">
                       {project.title}
                     </h3>
                     <p className="text-gray-300 text-sm md:text-base max-w-2xl line-clamp-2">

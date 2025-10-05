@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
 
 // ---------------------- Helper ----------------------
 async function logActivity(message: string) {
@@ -82,7 +84,10 @@ export async function GET() {
       .select(`
         id,
         title,
+        summary,
         description,
+        code_url,
+        demo_url,
         project_images(url)
       `)
       .order("id", { ascending: false });
@@ -92,7 +97,10 @@ export async function GET() {
     const projects = data.map((p: any) => ({
       id: p.id,
       title: p.title,
+      summary: p.summary || "",
       description: p.description,
+      codeUrl: p.code_url || "",
+      demoUrl: p.demo_url || "",
       images: p.project_images?.map((img: any) => img.url) || [],
     }));
 
@@ -106,13 +114,17 @@ export async function GET() {
   }
 }
 
+
 // ---------------------- PUT ----------------------
 export async function PUT(req: NextRequest) {
   try {
     const formData = await req.formData();
     const id = formData.get("id") as string;
     const title = formData.get("title") as string;
+    const summary = formData.get("summary") as string;
     const description = formData.get("description") as string;
+    const code_url = formData.get("code_url") as string;
+    const demo_url = formData.get("demo_url") as string;
     const files = formData.getAll("images") as File[];
 
     if (!id || !title || !description) {
@@ -122,29 +134,27 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    let imageUrls: string[] = [];
-
     // Upload new images if any
+    const imageUrls: string[] = [];
     for (const file of files) {
       const filePath = `projects/${id}/${Date.now()}_${file.name}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("projects")
         .upload(filePath, file, { cacheControl: "3600", upsert: true });
 
-      if (uploadError) continue;
-
-      const { data: urlData } = supabase.storage
-        .from("projects")
-        .getPublicUrl(uploadData.path);
-
-      imageUrls.push(urlData.publicUrl);
+      if (!uploadError && uploadData?.path) {
+        const { data: urlData } = supabase.storage
+          .from("projects")
+          .getPublicUrl(uploadData.path);
+        imageUrls.push(urlData.publicUrl);
+      }
     }
 
-    // Update project
+    // Update project using UUID string
     const { data: updatedProject, error: updateError } = await supabase
       .from("projects")
-      .update({ title, description })
-      .eq("id", Number(id))
+      .update({ title, summary, description, code_url, demo_url })
+      .eq("id", id)
       .select()
       .single();
 
@@ -157,9 +167,9 @@ export async function PUT(req: NextRequest) {
 
     // Insert new images if uploaded
     if (imageUrls.length > 0) {
-      await supabase.from("project_images").insert(
-        imageUrls.map((url) => ({ project_id: id, url }))
-      );
+      await supabase
+        .from("project_images")
+        .insert(imageUrls.map((url) => ({ project_id: id, url })));
     }
 
     await logActivity(`Edited project: ${title}`);

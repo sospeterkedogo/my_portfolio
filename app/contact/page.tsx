@@ -36,13 +36,35 @@ export default function ContactPage() {
     <section className="w-full px-4 sm:px-8 md:px-16 lg:px-60 py-16  text-white bg-[#1c1c1c]">
       {/* Header */}
       <div className=" mb-10">
-        <h2 className="text-4xl font-bold tracking-wide mb-4 text-center">
-          Let’s Connect
+        <h2 className="text-4xl font-bold tracking-wide mb-4 mt-10">
+          ABOUT ME
         </h2>
-        <p className="text-gray-300 text-lg leading-relaxed">
-          Have an idea, a project, or just want to say hello?  
-          I’m always excited to collaborate and bring creative visions to life.  
-          Whether it’s building a sleek web app, discussing design strategy, or exploring new opportunities I’d love to hear from you.
+
+        <p className="mb-4 text-md text-gray opacity-70">
+          I’m deeply passionate about crafting websites that are not just visually striking, 
+          but also intuitive, fast, and accessible to everyone. My approach blends creativity 
+          with precision. I love turning complex ideas into elegant, functional designs that 
+          solve real-world problems.
+        </p>
+
+        <p className="mb-4 text-md text-gray opacity-70">
+          Every project is an opportunity to explore new technologies, push creative boundaries, 
+          and deliver experiences that leave a lasting impression. I focus on performance, 
+          accessibility, and user-centered design because I believe that great websites do more 
+          than look good, they make lives easier, communicate ideas clearly, and inspire action.
+        </p>
+
+        <p className="mb-4 text-md text-gray opacity-70">
+          Beyond the code and visuals, I thrive on collaboration. I enjoy working closely with 
+          clients, understanding their vision, and transforming it into something tangible and impactful.
+        </p>
+
+        <p className="mb-4 text-md text-gray opacity-70">
+          Let’s create something extraordinary together, something that not only stands out but truly resonates.
+        </p>
+
+        <p className="text-md text-gray opacity-70">
+          I'm always looking for new opportunities and collaborations. Whether you have a project in mind, or just want to say hello, feel free to reach out using the form below.
         </p>
       </div>
 

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+
+const supabase = createClient();
 
 type Blog = {
   id: string;
@@ -49,14 +51,14 @@ export default function BlogsPage() {
   return (
     <main className="min-h-screen bg-[#1c1c1c] px-6 py-16">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-12">Latest Articles</h1>
+        <h1 className="text-4xl font-bold text-white mt-20">Latest Articles</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {blogs.map((blog) => (
             <Link
               key={blog.id}
               href={`/blog/${blog.id}`}
-              className="group flex flex-col rounded-2xl overflow-hidden bg-[#2a2a2a] hover:bg-[#323232] transition duration-300 shadow-md hover:shadow-xl"
+              className="group flex flex-col overflow-hidden bg-[#2a2a2a] hover:bg-[#323232] transition duration-300 shadow-md hover:shadow-xl"
             >
               {/* Cover image */}
               {blog.cover_url ? (

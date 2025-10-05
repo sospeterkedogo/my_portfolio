@@ -52,12 +52,10 @@ export default function HeroSection() {
   `}
 </style>
 
-<section className="min-h-[65vh] flex items-center justify-center text-center px-4">
+<section className="min-h-[65vh] flex items-center justify-center text-center w-full">
   <div
     style={{
-      fontFamily: "var(--font-inter)",
-      fontWeight: 800,
-      fontSize: "clamp(3.5rem, 12vw, 7rem)", 
+      fontSize: "clamp(4rem, 23vw, 10rem)", 
       color: "white",
       textTransform: "uppercase",
       letterSpacing: "0.05em",
@@ -66,11 +64,11 @@ export default function HeroSection() {
     }}
     className="md:text-8xl flip-container sm:text-5xl text-4xl font-extrabold"
   >
-    <div className="flip-line">SOSPETER</div>
-    <div className="flip-line">I AM A</div>
-    <div className="flip-line">DESIGNER</div>
-    <div className="flip-line">DEVELOPER</div>
-    <div className="flip-line">PENTESTER</div>
+    <div className="flip-line"><h1>SOSPETER</h1></div>
+    <div className="flip-line"><h1>I AM A</h1></div>
+    <div className="flip-line"><h1>DESIGNER</h1></div>
+    <div className="flip-line"><h1>DEVELOPER</h1></div>
+    <div className="flip-line"><h1>PENTESTER</h1></div>
   </div>
 </section>
 
