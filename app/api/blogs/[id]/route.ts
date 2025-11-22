@@ -113,9 +113,9 @@ export async function PUT(req: NextRequest) {
     const { data: updatedBlog, error: updateError } = await supabase
       .from("blogs")
       .update({ title, content, ...(coverUrl ? { cover_url: coverUrl } : {}) })
-      .eq("id", Number(id)) // ensure numeric match
+      .eq("id", id) // ensure numeric match
       .select()
-      .single();
+      .limit(1);
 
     if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 });
     if (!updatedBlog) return NextResponse.json({ error: "Blog not found" }, { status: 404 });
