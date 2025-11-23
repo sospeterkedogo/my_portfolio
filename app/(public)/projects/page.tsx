@@ -1,105 +1,36 @@
-"use client";
+import { getProjects } from "@/lib/admin/data";
+import ProjectCard from "@/components/projects/ProjectCard";
+import { Metadata } from "next";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-
-const supabase = createClient();
-
-type Project = {
-  id: number;
-  title: string;
-  description: string;
-  images: string[];
+export const metadata: Metadata = {
+  title: "All Projects | Portfolio",
+  description: "A showcase of my engineering and design work.",
 };
 
-export default function AllProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchProjects = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("projects")
-      .select(`
-        id,
-        title,
-        description,
-        project_images(url)
-      `)
-      .order("id", { ascending: true });
-
-    if (!error && data) {
-      const formatted = data.map((p: any) => ({
-        id: p.id,
-        title: p.title,
-        description: p.description,
-        images: p.project_images?.map((img: any) => img.url) || [],
-      }));
-      setProjects(formatted);
-    } else if (error) {
-      console.error("Error fetching projects:", error.message);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+export default async function AllProjectsPage() {
+  const projects = await getProjects();
 
   return (
-    <main className="min-h-screen bg-[#121212] w-full px-6 sm:px-8 md:px-16 lg:px-60 py-20">
-      <div className="max-w-5xl mx-auto">
-        {/* Page Title */}
-        <div className="mb-1 mt-10">
-          <h1 className="text-4xl font-bold text-white tracking-tight">
+    <main className="min-h-screen bg-[#1c1c1c] w-full py-24 px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-12 border-b border-neutral-800">
+          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
             Projects
           </h1>
-          <p className="text-gray-400 text-sm">
-            A showcase of selected works and experiments.
+          <p className="text-neutral-400 text-lg max-w-2xl">
+            Experiments, production apps, and open source contributions.
           </p>
         </div>
 
-        {loading ? (
-          <p className="text-gray-400 text-lg">Loading projects...</p>
-        ) : projects.length === 0 ? (
-          <p className="text-gray-400 text-lg">No projects yet.</p>
+        {projects.length === 0 ? (
+          <div className="py-20 text-center text-neutral-500 bg-neutral-900/50 rounded-xl border border-neutral-800">
+            <p>No projects found in the library.</p>
+          </div>
         ) : (
-          <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <Link href={`/projects/${project.id}`} key={project.id} passHref>
-                <div className="group relative w-full overflow-hidden shadow-lg bg-black cursor-pointer">
-                  
-                  {/* Image */}
-                  {project.images[0] ? (
-                    <img
-                      src={project.images[0]}
-                      alt={project.title}
-                      className="w-full h-[280px] md:h-[360px] object-cover transform group-hover:scale-105 transition duration-700 ease-out"
-                    />
-                  ) : (
-                    <div className="w-full h-[280px] md:h-[360px] bg-[#2a2a2a] flex items-center justify-center text-gray-500">
-                      No Image
-                    </div>
-                  )}
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition"></div>
-
-                  {/* Text Content */}
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-300 text-sm md:text-base max-w-2xl line-clamp-2">
-                      {project.description}
-                    </p>
-                    <span className="mt-3 inline-block text-gray-200 text-sm font-semibold group-hover:opacity-80 transition">
-                      View Project →
-                    </span>
-                  </div>
-                </div>
-              </Link>
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         )}

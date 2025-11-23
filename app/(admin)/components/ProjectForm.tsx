@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { Project } from "@/lib/types";
-import { saveProject, deleteProjectImage } from "@/lib/admin/actions";
-import { useState, useTransition, useEffect } from "react"; // <--- Import useEffect
+import { saveProject, deleteProjectImage } from "@/lib/actions";
+import { useState, useTransition, useEffect } from "react";
 import { Loader2, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -22,15 +22,7 @@ export default function ProjectForm({ project, onSuccess, onCancel }: Props) {
   // Initialize state
   const [existingImages, setExistingImages] = useState<string[]>(project?.images || []);
 
-  // -------------------------------------------------------------------------
-  // THE FIX: Sync local state when the project prop changes
-  // Without this, opening different projects might show stale/empty images
-  // -------------------------------------------------------------------------
-  useEffect(() => {
-    setExistingImages(project?.images || []);
-  }, [project]);
-
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
       title: project?.title || "",
       summary: project?.summary || "",
@@ -40,13 +32,34 @@ export default function ProjectForm({ project, onSuccess, onCancel }: Props) {
     },
   });
 
-  // Reset form values when project changes (handles Create -> Edit switch)
+  // -------------------------------------------------------------------------
+  // CONSOLIDATED SYNC LOGIC
+  // This ensures the form is fresh whenever you click "Edit" on a different card
+  // -------------------------------------------------------------------------
   useEffect(() => {
+    // 1. Sync Images
+    setExistingImages(project?.images || []);
+
+    // 2. Reset Text Inputs
     if (project) {
-        // You might need to use `reset` from react-hook-form here if titles aren't updating either
-        // but for now let's focus on images.
+      reset({
+        title: project.title,
+        summary: project.summary || "",
+        description: project.description,
+        code_url: project.code_url || "",
+        demo_url: project.demo_url || "",
+      });
+    } else {
+      // Clear form for "New Project"
+      reset({
+        title: "",
+        summary: "",
+        description: "",
+        code_url: "",
+        demo_url: "",
+      });
     }
-  }, [project]);
+  }, [project, reset]);
 
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
@@ -78,7 +91,7 @@ export default function ProjectForm({ project, onSuccess, onCancel }: Props) {
   const handleRemoveImage = (url: string) => {
     if (!confirm("Remove this image?")) return;
     
-    // Optimistic Update: Remove from UI immediately
+    // Optimistic Update
     setExistingImages((prev) => prev.filter((img) => img !== url));
 
     startTransition(async () => {
@@ -96,18 +109,20 @@ export default function ProjectForm({ project, onSuccess, onCancel }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       <div className="grid grid-cols-1 gap-4">
-        {/* Title & Text Fields */}
+        {/* Title */}
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-300">Title</label>
           <input {...register("title", { required: true })} className="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-white" />
           {errors.title && <span className="text-red-500 text-sm">Required</span>}
         </div>
         
-        {/* Summary & Description */}
+        {/* Summary */}
         <div>
            <label className="block text-sm font-medium mb-1 text-gray-300">Summary</label>
            <input {...register("summary")} className="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-white" />
         </div>
+
+        {/* Description */}
         <div>
            <label className="block text-sm font-medium mb-1 text-gray-300">Description</label>
            <textarea {...register("description", { required: true })} rows={4} className="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-white" />
@@ -129,7 +144,6 @@ export default function ProjectForm({ project, onSuccess, onCancel }: Props) {
         <div className="border-t border-neutral-800 pt-4 mt-2">
           <label className="block text-sm font-medium mb-3 text-gray-300">Project Images</label>
           
-          {/* Gallery with Delete Buttons */}
           {existingImages.length > 0 ? (
             <div className="grid grid-cols-4 gap-2 mb-4">
               {existingImages.map((img, idx) => (

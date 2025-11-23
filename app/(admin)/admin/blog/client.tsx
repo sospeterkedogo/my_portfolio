@@ -4,8 +4,8 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import { Plus, Pencil, Trash, X, Calendar } from "lucide-react";
 import { Blog } from "@/lib/types";
-import { deleteBlog } from "@/lib/admin/actions"; 
-import BlogForm from "@/components/admin/BlogForm"; 
+import { deleteBlog } from "@/lib/actions"; 
+import BlogForm from "@/app/(admin)/components/BlogForm"; 
 import { toast } from "sonner";
 import { format } from "date-fns";
 

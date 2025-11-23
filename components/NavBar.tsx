@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Menu, X, FileText } from "lucide-react"; // Consistent icons
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Define your navigation strategy here
   const navLinks = [
-    { name: "HIGHLIGHTS", href: "/projects" },
-    { name: "DEV DIARIES", href: "/blog" },
-    { name: "INFO", href: "/contact" },
+    { name: "Work", href: "/projects" },      // Dedicated page
+    { name: "About", href: "/#about" },       // Anchor on Home
+    { name: "Capabilities", href: "/#skills" }, // Anchor on Home
+    { name: "Contact", href: "/#contact" },   // Anchor on Home
   ];
 
   useEffect(() => {
@@ -23,85 +26,90 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 px-4 flex items-center justify-between transition-all duration-500 ease-in-out
-        ${scrolled ? "bg-[#2a2a2a] py-2 shadow-lg" : "bg-transparent py-4"}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-transparent
+        ${scrolled 
+          ? "bg-[#1c1c1c]/90 backdrop-blur-md py-3 shadow-2xl border-white/5" 
+          : "bg-transparent py-6"
+        }
       `}
     >
-      <Link href="/" className="text-white font-extrabold text-2xl tracking-wide">
-        My Portfolio
-      </Link>
+      <div className="max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
+        
+        {/* Logo */}
+        <Link href="/" className="relative group z-50">
+          <span className="text-white font-black text-xl tracking-tighter">
+            SOSPETER<span className="text-blue-500">.</span>
+          </span>
+        </Link>
 
-      {/* Hamburger for mobile */}
-      <button
-        className="lg:hidden block text-white focus:outline-none"
-        onClick={() => setMenuOpen(true)}
-        aria-label="Open Navigation"
-      >
-        <svg width="32" height="32" fill="none">
-          <path
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            d="M6 10h20M6 16h20M6 22h20"
-          />
-        </svg>
-      </button>
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-8">
+          <ul className="flex gap-8 text-sm font-medium text-neutral-300">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link 
+                  href={link.href} 
+                  className="hover:text-white transition-colors uppercase tracking-widest text-xs"
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-      {/* Links for desktop */}
-      <ul className="hidden lg:flex gap-8 text-white text-xl">
-        {navLinks.map((link) => (
-          <li key={link.href}>
-            <Link href={link.href} className="hover:text-cyan-300 transition">
-              {link.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          {/* Background overlay */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setMenuOpen(false)}
-          />
-
-          {/* Slide-in menu */}
-          <div
-            className={`absolute right-0 top-0 h-full w-3/4 max-w-xs bg-gray-900 shadow-xl p-6 text-white transform transition-transform duration-2000 ease-in-out ${
-              menuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          {/* CV Button */}
+          <a
+            href="/resume.pdf" // Put your PDF in the 'public' folder
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105"
           >
-            {/* Close button */}
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-white focus:outline-none"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close Navigation"
-            >
-              <svg width="28" height="28" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <line x1="18" y1="6" x2="6" y2="18" strokeLinecap="round" />
-                <line x1="6" y1="6" x2="18" y2="18" strokeLinecap="round" />
-              </svg>
-            </button>
-
-            {/* Links */}
-            <ul className="mt-12 flex flex-col gap-6 text-lg font-medium">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-cyan-300 transition"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <FileText size={14} /> Resume
+          </a>
         </div>
-      )}
+
+        {/* Mobile Toggle */}
+        <button
+          className="lg:hidden text-white focus:outline-none z-50"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle Menu"
+        >
+          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        <div
+          className={`fixed inset-0 bg-[#111] z-40 flex flex-col items-center justify-center transition-transform duration-300 ease-in-out lg:hidden ${
+            menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <ul className="flex flex-col gap-8 text-center">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-3xl font-bold text-white hover:text-blue-500 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+            
+            <li className="mt-8">
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold"
+                onClick={() => setMenuOpen(false)}
+              >
+                Download CV
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 }

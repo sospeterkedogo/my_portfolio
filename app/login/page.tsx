@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { login, signup } from './actions'
+import { login } from './actions'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -10,20 +10,16 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<{ login: boolean; signup: boolean }>({ login: false, signup: false })
 
-  const handleAction = async (action: 'login' | 'signup') => {
+  const handleAction = async (action: 'login') => {
     if (!formRef.current) return
     const formData = new FormData(formRef.current)
 
     setError(null)
-    setLoading((prev) => ({ ...prev, [action]: true }))
+    setLoading((prev) => ({ ...prev, login: true }))
 
     try {
       let result
-      if (action === 'login') {
-        result = await login(formData)
-      } else {
-        result = await signup(formData)
-      }
+      result = await login(formData)
 
       if (result.success) {
         router.push('/admin')
@@ -81,15 +77,6 @@ export default function LoginPage() {
               onClick={() => handleAction('login')}
             >
               {loading.login ? 'Logging in...' : 'Log in'}
-            </button>
-
-            <button
-              type="button"
-              disabled={loading.signup}
-              className="w-full sm:w-1/2 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 transition"
-              onClick={() => handleAction('signup')}
-            >
-              {loading.signup ? 'Signing up...' : 'Sign up'}
             </button>
           </div>
         </form>

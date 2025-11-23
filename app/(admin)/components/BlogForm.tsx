@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { Blog } from "@/lib/types";
-import { saveBlog, deleteBlogImage } from "@/lib/admin/actions";
+import { saveBlog, deleteBlogImage } from "@/lib/actions";
 import { useState, useTransition } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";

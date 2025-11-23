@@ -5,6 +5,80 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // ------------------------------------------------------------------
+// Contact Actions
+// ------------------------------------------------------------------
+
+const ContactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+export async function sendContactMessage(formData: FormData) {
+  const supabase = await createClient();
+
+  const rawData = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    message: formData.get("message"),
+  };
+
+  const validated = ContactSchema.safeParse(rawData);
+
+  if (!validated.success) {
+    const firstError = Object.values(validated.error.flatten().fieldErrors)[0]?.[0];
+    return { error: firstError || "Invalid inputs" };
+  }
+
+  const { name, email, message } = validated.data;
+
+  // 2. Send Email via Raw API (Bypassing the broken SDK)
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "Portfolio Contact <contact@devpete.co.uk>",
+        to: [process.env.MY_EMAIL || "kedogosospeter36@email.com"],
+        subject: `New Message from ${name}`,
+        reply_to: email, // Note: API expects snake_case 'reply_to', not 'replyTo'
+        text: `
+          Name: ${name}
+          Email: ${email}
+          
+          Message:
+          ${message}
+        `,
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Resend API Error:", errorData);
+      // We continue to DB save even if email fails
+    }
+  } catch (e) {
+    console.error("Email Fetch Failed:", e);
+  }
+
+  // 3. Insert into Database (Backup & Admin Dashboard)
+  const { error: dbError } = await supabase
+    .from("messages")
+    .insert(validated.data);
+
+  if (dbError) {
+    console.error("Database Error:", dbError);
+    return { error: "Failed to save message." };
+  }
+
+  return { success: true };
+}
+
+
+// ------------------------------------------------------------------
 // Project Actions
 // ------------------------------------------------------------------
 
@@ -197,3 +271,4 @@ export async function deleteBlog(id: string) {
 
   revalidatePath("/admin/blog");
 }
+

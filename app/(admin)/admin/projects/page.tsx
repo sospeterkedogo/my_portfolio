@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import ProjectsAdminClient from "@/lib/admin/client";
+import ProjectsAdminClient from "@/app/(admin)/admin/projects/client";
 import { getProjects } from "@/lib/admin/data";
 
 export default async function ProjectsAdminPage() {
