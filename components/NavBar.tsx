@@ -2,114 +2,134 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, FileText } from "lucide-react"; // Consistent icons
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Define your navigation strategy here
-  const navLinks = [
-    { name: "Work", href: "/projects" },      // Dedicated page
-    { name: "About", href: "/#about" },       // Anchor on Home
-    { name: "Capabilities", href: "/#skills" }, // Anchor on Home
-    { name: "Contact", href: "/#contact" },   // Anchor on Home
-  ];
-
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 20);
-    }
+    const onScroll = () => {
+      // Trigger state change when user scrolls past the Hero area (approx 100vh)
+      // Or sooner if you want the logo to appear faster. 
+      // Let's set it to 50px for immediate feedback, or 500px to wait for Hero to exit.
+      setScrolled(window.scrollY > 50);
+    };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const navLinks = [
+    { name: "Work", href: "/#work" },
+    { name: "About", href: "/#about" },
+    { name: "Insights", href: "/blog" },
+  ];
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-transparent
-        ${scrolled 
-          ? "bg-[#1c1c1c]/90 backdrop-blur-md py-3 shadow-2xl border-white/5" 
-          : "bg-transparent py-6"
-        }
-      `}
-    >
-      <div className="max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
-        
-        {/* Logo */}
-        <Link href="/" className="relative group z-50">
-          <span className="text-white font-black text-xl tracking-tighter">
-            SOSPETER<span className="text-blue-500">.</span>
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8">
-          <ul className="flex gap-8 text-sm font-medium text-neutral-300">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link 
-                  href={link.href} 
-                  className="hover:text-white transition-colors uppercase tracking-widest text-xs"
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out px-6 md:px-12
+          ${scrolled 
+            ? "py-4 bg-[#e0e0e0]/80 backdrop-blur-md border-b border-neutral-300" 
+            : "py-6 bg-transparent border-transparent"
+          }
+        `}
+      >
+        <div className="max-w-[1920px] mx-auto flex items-center justify-between">
+          
+          {/* LOGO - Only visible when scrolled */}
+          <div className="w-[140px]">
+            <AnimatePresence>
+              {scrolled && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  <Link href="/" className="font-black text-xl tracking-tighter text-neutral-900 group">
+                    SOSPETER<span className="text-blue-600 group-hover:text-neutral-900 transition-colors">.</span>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-          {/* CV Button */}
-          <a
-            href="/resume.pdf" // Put your PDF in the 'public' folder
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105"
+          {/* DESKTOP NAV - Always dark text for Light Theme */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name} 
+                href={link.href}
+                className="text-sm font-mono font-medium uppercase tracking-widest text-neutral-600 hover:text-black transition-colors relative group"
+              >
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* CTA BUTTON - "Let's Talk" instead of Resume (Resume is boring) */}
+          <div className="hidden md:flex justify-end w-[140px]">
+             <a 
+               href="mailto:kedogosospeter36@gmail.com"
+               className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest border rounded-full px-4 py-2 transition-all duration-300
+                 ${scrolled 
+                   ? "border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-[#e0e0e0]" 
+                   : "border-neutral-900 text-neutral-900 bg-transparent hover:bg-neutral-900 hover:text-[#e0e0e0]"
+                 }
+               `}
+             >
+               Contact <ArrowUpRight size={14} />
+             </a>
+          </div>
+
+          {/* MOBILE TOGGLE */}
+          <button
+            className="md:hidden text-neutral-900 z-50 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle Menu"
           >
-            <FileText size={14} /> Resume
-          </a>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+      </header>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden text-white focus:outline-none z-50"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle Menu"
-        >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-
-        {/* Mobile Menu Overlay */}
-        <div
-          className={`fixed inset-0 bg-[#111] z-40 flex flex-col items-center justify-center transition-transform duration-300 ease-in-out lg:hidden ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <ul className="flex flex-col gap-8 text-center">
-            {navLinks.map((link) => (
-              <li key={link.href}>
+      {/* MOBILE MENU OVERLAY - Matches the Light Theme */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-[#e0e0e0] z-40 flex flex-col items-center justify-center"
+          >
+            <div className="flex flex-col gap-8 text-center">
+              {navLinks.map((link) => (
                 <Link
+                  key={link.name}
                   href={link.href}
-                  className="text-3xl font-bold text-white hover:text-blue-500 transition-colors"
                   onClick={() => setMenuOpen(false)}
+                  className="text-4xl font-black text-neutral-900 hover:text-blue-600 transition-colors uppercase tracking-tighter"
                 >
                   {link.name}
                 </Link>
-              </li>
-            ))}
-            
-            <li className="mt-8">
+              ))}
+              
+              <div className="w-12 h-[1px] bg-neutral-300 mx-auto my-4"></div>
+
               <a
                 href="/resume.pdf"
                 target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold"
-                onClick={() => setMenuOpen(false)}
+                className="font-mono text-sm text-neutral-500 uppercase tracking-widest hover:text-black"
               >
-                Download CV
+                Download Resume
               </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

@@ -3,7 +3,29 @@ import { redirect } from "next/navigation";
 import { Project } from "@/lib/types";
 import { Blog } from "@/lib/types";
 
+// Fetch single project by ID
+export async function getBlogById(id: string): Promise<Blog | null> {
+  const supabase = await createClient();
 
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) {
+    console.error(`Error fetching blog post ${id}:`, error);
+    return null;
+  }
+
+  // Flatten images
+  return {
+    ...data,
+    images: data.blog_images 
+      ? data.blog_images.map((img: { url: string }) => img.url) 
+      : [],
+  };
+}
 
 // Fetch single project by ID
 export async function getProjectById(id: string): Promise<Project | null> {

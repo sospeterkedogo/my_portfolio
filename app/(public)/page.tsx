@@ -1,65 +1,38 @@
-import Link from "next/link";
 import HeroSection from "@/components/sections/Hero";
-import ProjectsGrid from "@/components/projects/ProjectsGrid"; // Now works because page is Server
-import BlogGrid from "@/components/blogs/BlogGrid"; // Needs to be a Server Component too (see below)
+import ProjectsGrid from "@/components/projects/ProjectsGrid";
 import About from "@/components/sections/About";
 import Technologies from "@/components/sections/Technologies";
-import Contact from "@/components/sections/Contact";
+import BlogList from "@/components/blogs/BlogList"; // Renamed to List for variety
 
 export default function Home() {
   return (
-    <main className="bg-[#1c1c1c] min-h-screen flex flex-col">
-      {/* Hero Section */}
+    <main className="bg-[#e0e0e0] min-h-screen flex flex-col w-full text-neutral-900 selection:bg-blue-600 selection:text-white">
+      
+      {/* 1. HERO: The Hook */}
       <HeroSection />
 
-      {/* Projects Section */}
-      <section id="projects" className="w-full max-w-7xl mx-auto px-6 py-24">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">
-              Check it out
-            </h2>
-            <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide text-white">
-              Featured Projects
-            </h2>
-          </div>
-
-          <Link href="/projects" className="hidden sm:block">
-            <button className="text-neutral-400 hover:text-blue-400 font-medium transition-colors border-b border-transparent hover:border-blue-400 pb-1">
-              View All Projects -&gt;
-            </button>
-          </Link>
-        </div>
-        
-        {/* The Server Component */}
+      {/* 2. PROJECTS: The Proof (Grid) */}
+      {/* Note: Remove the padding/headers here. The Component handles it. */}
+      <div id="work">
         <ProjectsGrid />
+      </div>
 
-        {/* Mobile only button */}
-        <div className="mt-8 sm:hidden text-center">
-          <Link href="/projects" className="text-blue-400 font-semibold">
-             View All Projects
-          </Link>
-        </div>
-      </section>
-
-      {/* Other Sections */}
+      {/* 3. ABOUT: The Philosophy (Typography) */}
       <About />
+
+      {/* 4. TECH: The Tools (Marquee/Motion) */}
       <Technologies />
       
-      {/* Blog Section */}
-      <section className="w-full max-w-7xl mx-auto px-6 py-24">
-        <div className="mb-12">
-          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">
-            Insights
-          </h2>
-          <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide text-white">
-            Latest Blogs
-          </h2>
+      {/* 5. BLOG: The Thoughts (Editorial List) */}
+      <section className="w-full px-6 md:px-24 py-24 border-t border-neutral-300">
+        <div className="flex flex-col md:flex-row justify-between mb-16 items-baseline">
+           <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase">Insight</h2>
+           <p className="font-mono text-xs text-neutral-500 uppercase tracking-widest mt-4 md:mt-0">
+             (Reading Time: Varies)
+           </p>
         </div>
-        <BlogGrid />
+        <BlogList />
       </section>
-
-      <Contact />
     </main>
   );
 }

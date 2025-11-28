@@ -1,65 +1,75 @@
+import { Code2, Database, Layout, Terminal } from "lucide-react";
+
+const SKILLS = [
+  {
+    category: "Frontend Architecture",
+    icon: <Layout className="w-4 h-4 text-blue-500" />,
+    items: ["React", "Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"]
+  },
+  {
+    category: "Backend & Data",
+    icon: <Database className="w-4 h-4 text-purple-500" />,
+    items: ["Node.js", "PostgreSQL", "GraphQL", "Prisma", "Redis", "Supabase"]
+  },
+  {
+    category: "DevOps & Cloud",
+    icon: <Terminal className="w-4 h-4 text-green-500" />,
+    items: ["AWS (EC2, S3)", "Docker", "CI/CD Pipelines", "Vercel", "Linux", "Git"]
+  },
+  {
+    category: "Design & Tools",
+    icon: <Code2 className="w-4 h-4 text-pink-500" />,
+    items: ["Figma", "Adobe Suite", "Jest/Vitest", "Storybook", "Jira", "Agile"]
+  }
+];
+
 export default function Technologies() {
-  const domains = [
-    {
-      title: "Front End",
-      stack: "React, Next.js, Tailwind, Framer Motion",
-      bg: "/images/frontend.jpg", // Ensure these images exist in /public/images/
-    },
-    {
-      title: "Backend",
-      stack: "Node.js, Supabase, PostgreSQL, Prisma",
-      bg: "/images/backend.jpg",
-    },
-    {
-      title: "Mobile",
-      stack: "React Native, Expo, Firebase",
-      bg: "/images/mobile.jpg",
-    },
-    {
-      title: "Cloud & DevOps",
-      stack: "Vercel, Docker, CI/CD Pipelines",
-      bg: "/images/cloud.jpg",
-    },
-  ];
-
   return (
-    <section id="skills" className="relative w-full min-h-screen bg-[#1c1c1c] text-white">
-      {/* Header Overlay */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 text-center z-20 w-full px-4 pointer-events-none">
-        <h2 className="font-[var(--font-inter)] text-sm font-bold uppercase tracking-widest text-white/50">
-          Capabilities
-        </h2>
-        <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
-          THINGS I DO
-        </h3>
-      </div>
-
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 h-screen h-full pt-40 sm:pt-0">
-        {domains.map((item, idx) => (
-          <div key={idx} className="relative h-full group overflow-hidden">
-            {/* Background Image with Parallax/Zoom Effect */}
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url('${item.bg}')` }}
-            />
-            
-            {/* Dark Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 group-hover:from-black/80 transition-colors" />
-
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 w-full p-8 text-center z-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-              <h4 className="text-2xl font-bold uppercase mb-2 tracking-wider">
-                {item.title}
-              </h4>
-              <p className="text-sm text-gray-300 font-light opacity-80 group-hover:opacity-100">
-                {item.stack}
-              </p>
-              {/* Decorative Line */}
-              <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
-            </div>
+    <section id="skills" className="py-32 bg-neutral-900 text-neutral-100 border-y border-neutral-800">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-24">
+        
+        {/* Section Header */}
+        <div className="mb-20 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-neutral-800 pb-8">
+          <div>
+            <span className="font-mono text-xs tracking-widest text-neutral-500 uppercase block mb-4">
+              / 003 — Capabilities
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">
+              Technical <br className="hidden md:block"/> Stack
+            </h2>
           </div>
-        ))}
+          <p className="font-mono text-sm text-neutral-500 max-w-sm text-right">
+            A curated list of technologies I use to build scalable, high-performance digital products.
+          </p>
+        </div>
+
+        {/* The "Spec Sheet" Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+          {SKILLS.map((group, idx) => (
+            <div key={idx} className="flex flex-col gap-6">
+              
+              {/* Category Label */}
+              <div className="flex items-center gap-3 text-neutral-400">
+                {group.icon}
+                <h3 className="font-bold uppercase tracking-wider text-sm">
+                  {group.category}
+                </h3>
+              </div>
+
+              {/* The List */}
+              <ul className="flex flex-col gap-3">
+                {group.items.map((tech) => (
+                  <li 
+                    key={tech} 
+                    className="text-xl md:text-2xl font-medium text-neutral-300 hover:text-white transition-colors cursor-default border-l-2 border-transparent hover:border-blue-500 pl-0 hover:pl-4 transition-all duration-200"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
