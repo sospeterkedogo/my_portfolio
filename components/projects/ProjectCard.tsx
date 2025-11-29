@@ -3,71 +3,99 @@
 import Link from "next/link";
 import { Project } from "@/lib/types";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Github, Globe } from "lucide-react";
 
-// Add an index prop to stagger animations if you want
 export default function ProjectCard({ project, index }: { project: Project; index: number }) {
+  // Safe fallbacks for mixed naming conventions
+  const liveUrl = (project as any).live_url || (project as any).demoUrl || (project as any).demo_url || null;
+  const repoUrl = (project as any).github_url || (project as any).repoUrl || (project as any).code_url || null;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="flex flex-col w-full group"
     >
+      {/* 1. IMAGE AREA - Shorter Aspect Ratio (16:9) */}
       <Link 
         href={`/projects/${project.id}`} 
-        className="group block w-full cursor-none-target" // Hook for custom cursor if you have one
+        className="relative w-full aspect-video overflow-hidden bg-neutral-200 mb-4 cursor-pointer block"
       >
-        {/* IMAGE CONTAINER */}
-        {/* 4:3 Aspect Ratio looks more "Design Portfolio" than 16:9 Video ratio */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-300 mb-6">
-          
-          {/* Overlay to darken image slightly until hover */}
-          <div className="absolute inset-0 bg-neutral-900/10 z-10 group-hover:bg-transparent transition-colors duration-500 mix-blend-multiply" />
+          {/* Dark Overlay on Hover */}
+          <div className="absolute inset-0 bg-neutral-900/0 group-hover:bg-neutral-900/10 z-10 transition-colors duration-500" />
           
           {project.images && project.images.length > 0 ? (
             <img
               src={project.images[0]}
               alt={project.title}
-              className="w-full h-full object-cover grayscale transition-all duration-700 ease-in-out group-hover:grayscale-0 group-hover:scale-105"
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105"
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-200 text-neutral-400 font-mono text-xs">
-               <span>IMAGE_MISSING</span>
+            <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-200 text-neutral-400 font-mono text-[10px] tracking-widest">
+               <span>NO_PREVIEW</span>
             </div>
           )}
 
-          {/* Floating "View Project" Badge that appears on hover */}
-          <div className="absolute bottom-0 right-0 p-4 z-20 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-             <div className="bg-white text-black px-4 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                View Case <ArrowUpRight size={14} />
+          {/* Badge */}
+          <div className="absolute top-3 right-3 z-20 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+             <div className="bg-white/90 backdrop-blur-sm text-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 shadow-sm">
+                Case Study <ArrowUpRight size={12} />
              </div>
           </div>
-        </div>
+      </Link>
 
-        {/* TEXT CONTENT - Minimalist & Bold */}
-        <div className="flex flex-col border-t border-neutral-300 pt-4">
-          <div className="flex justify-between items-start">
-            <h3 className="text-2xl md:text-3xl font-bold text-neutral-900 uppercase leading-none mb-2 group-hover:text-blue-700 transition-colors duration-300">
+      {/* 2. CONTENT AREA - Compact & Scan-friendly */}
+      <div className="flex flex-col border-t border-neutral-300 pt-3">
+        
+        {/* Title Row */}
+        <div className="flex justify-between items-baseline mb-2">
+          <Link href={`/projects/${project.id}`}>
+            <h3 className="text-xl md:text-2xl font-bold text-neutral-900 uppercase leading-none hover:text-blue-700 transition-colors">
               {project.title}
             </h3>
-            {/* Year or Category Tag */}
-            <span className="font-mono text-xs text-neutral-500 border border-neutral-300 px-2 py-1 rounded-full uppercase">
-               2025
-            </span>
-          </div>
-
-          <p className="text-neutral-600 text-sm md:text-base font-medium line-clamp-2 max-w-[90%] mt-2">
-            {project.description}
-          </p>
-          
-          {/* Optional: Tech stack row if you have it in your type */}
-          {/* <div className="mt-4 flex gap-2 overflow-hidden">
-             {project.tags.map(tag => <span className="text-[10px] uppercase font-mono text-neutral-400">/{tag}</span>)}
-          </div> */}
+          </Link>
+          <span className="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">
+             2024
+          </span>
         </div>
-      </Link>
+
+        {/* Description - Clamped tightly */}
+        <p className="text-neutral-600 text-sm font-medium line-clamp-2 max-w-[95%] mb-4 leading-relaxed">
+          {project.description}
+        </p>
+        
+        {/* 3. QUICK ACTION ROW - The "Recruiter Scanner" */}
+        <div className="flex gap-5 mt-auto pt-2">
+            {liveUrl && (
+                <a 
+                    href={liveUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-900 hover:text-blue-600 transition-colors"
+                >
+                    <Globe size={12} /> Live Demo
+                </a>
+            )}
+            
+            {repoUrl && (
+                <a 
+                    href={repoUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors"
+                >
+                    <Github size={12} /> Code
+                </a>
+            )}
+
+            {!liveUrl && !repoUrl && (
+                 <span className="text-[10px] font-mono text-neutral-400 uppercase">Internal Project</span>
+            )}
+        </div>
+      </div>
     </motion.div>
   );
 }
