@@ -7,15 +7,15 @@ import { Mail, Github, Linkedin, MapPin, ArrowRight } from "lucide-react";
 export default function HeroSection() {
   return (
     <section className="relative w-full h-screen bg-[#e0e0e0] text-neutral-900 overflow-hidden flex items-center px-6 md:px-24">
-      
+
       {/* Background Texture - faint noise for that 'print' feel */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
 
       {/* MAIN CONTENT BLOCK - The "Paragraph" */}
       <div className="relative z-10 flex flex-col items-start max-w-5xl">
-        
+
         {/* 1. META DATA LINE (Name + Location) */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -37,42 +37,42 @@ export default function HeroSection() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // Apple-style ease
             className="text-[clamp(5rem,14vw,11rem)] font-black text-neutral-900"
           >
-            FULL-STACK
+            SOFTWARE
           </motion.h1>
-          
+
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center gap-4"
           >
-             {/* Stylistic indent/arrow to break the blockiness */}
+            {/* Stylistic indent/arrow to break the blockiness */}
             <ArrowRight className="w-[4vw] h-[4vw] text-blue-600 hidden md:block" strokeWidth={3} />
-            
+
             <h1 className="text-[clamp(5rem,14vw,11rem)] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-neutral-800">
-              DEVELOPER<span className="text-blue-600">.</span>
+              ENGINEER<span className="text-blue-600">.</span>
             </h1>
           </motion.div>
         </div>
 
         {/* 3. DESCRIPTION & LINKS - Integrated into the flow below */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-10 flex flex-col md:flex-row items-start md:items-center gap-8"
         >
-           {/* Small narrative text if you want it */}
-           <p className="max-w-xs text-neutral-600 font-medium leading-relaxed">
+          {/* Small narrative text if you want it */}
+          <p className="max-w-xs text-neutral-600 font-medium leading-relaxed">
             Building functional, user-friendly web applications with a focus on clean code and continuous learning.
-           </p>
+          </p>
 
-           {/* Action Icons */}
-           <div className="flex gap-4">
-              <SocialButton href="mailto:kedogosospeter36@gmail.com" icon={<Mail size={18} />} />
-              <SocialButton href="https://github.com/sospeterkedogo" icon={<Github size={18} />} />
-              <SocialButton href="https://linkedin.com/in/sospeter-kedogo" icon={<Linkedin size={18} />} />
-           </div>
+          {/* Action Icons */}
+          <div className="flex gap-4">
+            <SocialButton href="mailto:kedogosospeter36@gmail.com" icon={<Mail size={18} />} />
+            <SocialButton href="https://github.com/sospeterkedogo" icon={<Github size={18} />} />
+            <SocialButton href="https://linkedin.com/in/sospeter-kedogo" icon={<Linkedin size={18} />} />
+          </div>
         </motion.div>
 
       </div>
