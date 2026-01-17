@@ -64,7 +64,7 @@ export default function HeroSection() {
         >
           {/* Small narrative text if you want it */}
           <p className="max-w-xs text-neutral-600 font-medium leading-relaxed">
-            Building functional, user-friendly web applications with a focus on clean code and continuous learning.
+            I am a full-stack software engineer with a passion for building user-friendly web applications with a focus on clean code and continuous learning.
           </p>
 
           {/* Action Icons */}
