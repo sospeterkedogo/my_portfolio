@@ -87,19 +87,25 @@ export default function Navbar() {
 
           {/* MOBILE TOGGLE */}
           <button
-            className="md:hidden text-neutral-900 z-50 p-2"
+            className="md:hidden text-neutral-900 z-50 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Menu"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
           </button>
         </div>
       </header>
 
-      {/* MOBILE MENU OVERLAY - Matches the Light Theme */}
+      {/* MOBILE MENU OVERLAY */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

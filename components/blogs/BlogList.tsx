@@ -39,9 +39,10 @@ export default async function BlogList() {
                 {blog.title}
               </h3>
               
-              {/* Subtle Arrow that moves on hover */}
+              {/* Subtle Arrow that moves on hover — decorative */}
               <ArrowRight 
                 size={20} 
+                aria-hidden="true"
                 className="text-neutral-400 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" 
               />
             </div>
@@ -55,7 +56,7 @@ export default async function BlogList() {
             href="/blog" 
             className="inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-widest text-neutral-900 border-b-2 border-neutral-900 pb-1 hover:text-blue-600 hover:border-blue-600 transition-all"
         >
-            View Full Archive <ArrowRight size={14} />
+            View all blog posts <ArrowRight size={14} aria-hidden="true" />
         </Link>
       </div>
     </div>

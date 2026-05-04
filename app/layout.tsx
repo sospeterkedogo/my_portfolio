@@ -2,6 +2,16 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Inter, Montserrat, Bebas_Neue } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Sospeter Kedogo — Software Engineer",
+    template: "%s | Sospeter Kedogo",
+  },
+  description:
+    "Full-stack software engineer based in Northampton, UK. Specialising in React, Next.js, and Node.js.",
+};
 
 const inter = Inter({
   subsets: ["latin"],
