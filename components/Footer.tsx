@@ -28,15 +28,20 @@ export default function Footer() {
           </h3>
 
           {/* Copy Email Button */}
-          <div className="group cursor-pointer mb-2" onClick={handleCopy}>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label={copied ? "Email address copied" : "Copy email address to clipboard"}
+            className="group cursor-pointer mb-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+          >
             <p className="font-mono text-xs text-neutral-500 mb-2 uppercase tracking-widest">Click to copy</p>
             <div className="flex items-center gap-4 text-2xl md:text-4xl font-bold hover:text-blue-500 transition-colors">
               kedogosospeter36@gmail.com
-              <span className="text-xs bg-neutral-800 p-2 rounded-full text-neutral-400">
+              <span aria-hidden="true" className="text-xs bg-neutral-800 p-2 rounded-full text-neutral-400">
                 {copied ? "COPIED" : <Copy size={16} />}
               </span>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 

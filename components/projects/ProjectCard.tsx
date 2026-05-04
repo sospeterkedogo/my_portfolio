@@ -23,8 +23,8 @@ export default function ProjectCard({ project, index }: { project: Project; inde
         href={`/projects/${project.id}`} 
         className="relative w-full aspect-video overflow-hidden bg-neutral-200 mb-4 cursor-pointer block"
       >
-          {/* Dark Overlay on Hover */}
-          <div className="absolute inset-0 bg-neutral-900/0 group-hover:bg-neutral-900/10 z-10 transition-colors duration-500" />
+          {/* Dark Overlay on Hover — decorative */}
+          <div aria-hidden="true" className="absolute inset-0 bg-neutral-900/0 group-hover:bg-neutral-900/10 z-10 transition-colors duration-500" />
           
           {project.images && project.images.length > 0 ? (
             <img
@@ -39,10 +39,10 @@ export default function ProjectCard({ project, index }: { project: Project; inde
             </div>
           )}
 
-          {/* Badge */}
-          <div className="absolute top-3 right-3 z-20 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+          {/* Badge — decorative */}
+          <div aria-hidden="true" className="absolute top-3 right-3 z-20 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
              <div className="bg-white/90 backdrop-blur-sm text-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 shadow-sm">
-                Case Study <ArrowUpRight size={12} />
+                Case Study <ArrowUpRight size={12} aria-hidden="true" />
              </div>
           </div>
       </Link>
@@ -74,9 +74,10 @@ export default function ProjectCard({ project, index }: { project: Project; inde
                     href={liveUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-900 hover:text-blue-600 transition-colors"
+                    aria-label={`View live demo of ${project.title}`}
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-900 hover:text-blue-600 transition-colors min-h-[44px] py-2"
                 >
-                    <Globe size={12} /> Live Demo
+                    <Globe size={12} aria-hidden="true" /> Live Demo
                 </a>
             )}
             
@@ -85,9 +86,10 @@ export default function ProjectCard({ project, index }: { project: Project; inde
                     href={repoUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors"
+                    aria-label={`View source code for ${project.title} on GitHub`}
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors min-h-[44px] py-2"
                 >
-                    <Github size={12} /> Code
+                    <Github size={12} aria-hidden="true" /> Code
                 </a>
             )}
 

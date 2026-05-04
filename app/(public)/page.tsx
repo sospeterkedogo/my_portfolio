@@ -6,7 +6,7 @@ import BlogList from "@/components/blogs/BlogList"; // Renamed to List for varie
 
 export default function Home() {
   return (
-    <main className="bg-[#e0e0e0] min-h-screen flex flex-col w-full text-neutral-900 selection:bg-blue-600 selection:text-white">
+    <main id="main-content" className="bg-[#e0e0e0] min-h-screen flex flex-col w-full text-neutral-900 selection:bg-blue-600 selection:text-white">
       
       {/* 1. HERO: The Hook */}
       <HeroSection />

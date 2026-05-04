@@ -3,8 +3,8 @@ import { Metadata } from "next";
 
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "My Portfolio",
+  title: "Home",
+  description: "Sospeter Kedogo — Full-stack software engineer based in Northampton, UK.",
 };
 
 

@@ -12,7 +12,7 @@ export default async function BlogPage() {
     const blogs = await getBlogs();
 
     return (
-        <main className="bg-[#e0e0e0] min-h-screen flex flex-col w-full text-neutral-900 selection:bg-blue-600 selection:text-white">
+        <main id="main-content" className="bg-[#e0e0e0] min-h-screen flex flex-col w-full text-neutral-900 selection:bg-blue-600 selection:text-white">
 
             {/* PAGE HEADER */}
             <header className="px-6 md:px-24 pt-32 pb-20 border-b border-neutral-300">

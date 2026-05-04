@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Project } from "@/lib/types";
 import { Blog } from "@/lib/types";
+import { staticProjects } from "@/content/projects";
+import { staticPosts } from "@/content/posts";
 
 // Fetch single project by ID
 export async function getBlogById(id: string): Promise<Blog | null> {
@@ -58,46 +60,67 @@ export async function getProjectById(id: string): Promise<Project | null> {
 
 
 export async function getBlogs(): Promise<Blog[]> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("blogs")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(3);
 
-  const { data, error } = await supabase
-    .from("blogs")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(3); // Only fetch latest 3 for the home page
-
-  if (error) {
-    console.error("Error fetching blogs:", error);
-    return [];
+    if (!error && data && data.length > 0) {
+      return data as Blog[];
+    }
+  } catch {
+    // Supabase unavailable — fall back to static content
   }
 
-  return data as Blog[];
+  // Fallback: static posts from content/posts.ts
+  return staticPosts.map((p) => ({
+    id: p.id,
+    title: p.title,
+    content: p.content,
+    cover_url: p.cover_url ?? null,
+    created_at: p.created_at,
+  }));
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select(`
+        *,
+        project_images (
+          url
+        )
+      `)
+      .order("created_at", { ascending: false });
 
-  const { data, error } = await supabase
-    .from("projects")
-    .select(`
-      *,
-      project_images (
-        url
-      )
-    `)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching projects:", error);
-    return [];
+    if (!error && data && data.length > 0) {
+      // Flatten the awkward join structure into a clean string[]
+      return data.map((p: any) => ({
+        ...p,
+        images: p.project_images
+          ? p.project_images.map((img: { url: string }) => img.url)
+          : [],
+      }));
+    }
+  } catch {
+    // Supabase unavailable — fall back to static content
   }
 
-  // Flatten the awkward join structure into a clean string[]
-  return data.map((p: any) => ({
-    ...p,
-    images: p.project_images 
-      ? p.project_images.map((img: { url: string }) => img.url) 
-      : [],
+  // Fallback: static projects from content/projects.ts
+  return staticProjects.map((p) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    summary: p.summary,
+    images: p.images ?? [],
+    code_url: p.github_url,
+    demo_url: p.live_url,
+    created_at: p.created_at,
   }));
 }
 

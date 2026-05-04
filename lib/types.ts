@@ -19,6 +19,9 @@ export interface Project {
   images?: string[];
   code_url?: string;
   demo_url?: string;
+  /** Free-form tags for filtering, e.g. ["React", "TypeScript"] */
+  tags?: string[];
+  created_at?: string;
 };
 
 export interface Blog {
@@ -27,6 +30,8 @@ export interface Blog {
   content: string;
   cover_url?: string | null;
   created_at: string;
+  /** Free-form tags for filtering, e.g. ["Tutorial", "React"] */
+  tags?: string[];
 };
 
 export interface TileProps {
