@@ -71,7 +71,7 @@ export default function AboutPage() {
                         The Journey
                      </h3>
                      <p>
-                        I started coding in high school to build PC games for my friends and I. Starting with the Unity game engine and C++, that's when I discovered my real passion — not just making things work, but understanding the systems underneath them.
+                        I started coding in high school to build PC games for my friends and me. Starting with the Unity game engine and C++, that's when I discovered my real passion — not just making things work, but understanding the systems underneath them.
                      </p>
 
                      <br />
