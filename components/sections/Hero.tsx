@@ -9,7 +9,7 @@ import Link from "next/link";
 const HIGHLIGHTS = [
   { label: "Location", value: "Northampton, UK" },
   { label: "Experience", value: "3+ Years" },
-  { label: "Focus", value: "React / Node.js" },
+  { label: "Focus", value: "Systems & Scale" },
   { label: "Status", value: "Open to Work" },
 ];
 
@@ -80,7 +80,7 @@ export default function HeroSection() {
                 strokeWidth={3}
               />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-neutral-800">
-                ENGINEER<span className="text-blue-600">.</span>
+                DEVELOPER<span className="text-blue-600">.</span>
               </span>
             </span>
           </motion.h1>
@@ -91,8 +91,9 @@ export default function HeroSection() {
           {...fadeIn(0.3)}
           className="max-w-md text-neutral-700 font-medium leading-relaxed mb-10 text-base md:text-lg"
         >
-          Full-stack engineer who turns complex ideas into performant, accessible
-          web products — from database schema to pixel-perfect UI.
+          Full-stack developer focused on scalable, high-performance systems —
+          from real-time collaboration layers and payment workflows to
+          agent-driven backend architecture.
         </motion.p>
 
         {/* ── 4. CTAs ── */}

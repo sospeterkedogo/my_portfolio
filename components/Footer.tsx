@@ -55,8 +55,8 @@ export default function Footer() {
               SOSPETER<span className="text-blue-600">.</span>
             </Link>
             <p className="text-neutral-500 text-sm max-w-sm leading-relaxed">
-              Building digital experiences with architectural precision.
-              Focusing on accessibility, performance, and scalable systems.
+              Building scalable, high-performance systems — from real-time
+              collaboration layers to payment infrastructure and agent-driven backends.
             </p>
           </div>
 

@@ -2,24 +2,24 @@ import { Code2, Database, Layout, Terminal } from "lucide-react";
 
 const SKILLS = [
   {
-    category: "Frontend Architecture",
-    icon: <Layout className="w-4 h-4 text-blue-500" />,
-    items: ["React", "Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"]
-  },
-  {
-    category: "Backend & Data",
-    icon: <Database className="w-4 h-4 text-purple-500" />,
-    items: ["Node.js", "PostgreSQL", "GraphQL", "Prisma", "Redis", "Supabase"]
-  },
-  {
-    category: "DevOps & Cloud",
+    category: "Core Systems",
     icon: <Terminal className="w-4 h-4 text-green-500" />,
-    items: ["AWS (EC2, S3)", "Docker", "CI/CD Pipelines", "Vercel", "Linux", "Git"]
+    items: ["Node.js", "TypeScript", "PostgreSQL", "Redis / Upstash", "Supabase", "REST & GraphQL"]
   },
   {
-    category: "Design & Tools",
+    category: "Frontend & Real-time",
+    icon: <Layout className="w-4 h-4 text-blue-500" />,
+    items: ["React 19", "Next.js 16", "Liveblocks", "Tailwind CSS", "Framer Motion", "Three.js"]
+  },
+  {
+    category: "Infrastructure & DevOps",
+    icon: <Database className="w-4 h-4 text-purple-500" />,
+    items: ["AWS (EC2, S3)", "Docker", "CI/CD Pipelines", "Vercel", "Linux / VPS", "Playwright"]
+  },
+  {
+    category: "Payments & Agents",
     icon: <Code2 className="w-4 h-4 text-pink-500" />,
-    items: ["Figma", "Adobe Suite", "Jest/Vitest", "Storybook", "Jira", "Agile"]
+    items: ["Stripe Checkout", "Webhook Flows", "Billing Portals", "Agent Orchestration", "Task Routing", "Prisma / ORM"]
   }
 ];
 
@@ -39,7 +39,7 @@ export default function Technologies() {
             </h2>
           </div>
           <p className="font-mono text-sm text-neutral-500 max-w-sm text-right">
-            A curated list of technologies I use to build apps.
+            The stack I use to ship systems that scale.
           </p>
         </div>
 

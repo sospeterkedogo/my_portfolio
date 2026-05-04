@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
    title: "About | Sospeter",
-   description: "Software Engineer based in Northampton, UK.",
+   description: "Software Developer based in Northampton, UK. Building scalable, high-performance systems.",
 };
 
 export default function AboutPage() {
@@ -21,7 +21,7 @@ export default function AboutPage() {
                   <span className="text-neutral-400">Sospeter.</span>
                </h1>
                <p className="text-xl md:text-2xl text-neutral-600 max-w-2xl leading-relaxed font-medium">
-                  I'm a Software Engineer based in Northampton, UK.
+                  I'm a Software Developer based in Northampton, UK — focused on building scalable, high-performance systems.
                </p>
             </div>
          </header>
@@ -56,7 +56,7 @@ export default function AboutPage() {
                      </div>
                      <div>
                         <span className="block text-neutral-900 font-bold mb-1">Focus</span>
-                        React / Node
+                        Systems & Scale
                      </div>
                   </div>
                </div>
@@ -71,17 +71,17 @@ export default function AboutPage() {
                         The Journey
                      </h3>
                      <p>
-                        I started coding in high school to build pc games for my friends and I. I initially started with learning the Unity game engine and that is when I discovered my passion for programming. I learnt C++ through youtube videos and practiced relpicating the code of each eposide without looking at the video.
+                        I started coding in high school to build PC games for my friends and I. Starting with the Unity game engine and C++, that's when I discovered my real passion — not just making things work, but understanding the systems underneath them.
                      </p>
 
                      <br />
                      <p>
-                        I then moved on to web development and started learning HTML, CSS, and JavaScript. I was fascinated by the fact that I could create something that could be accessed by anyone with an internet connection. I then moved on to learning React and Node.js and started building full-stack applications.
+                        I moved into web development and quickly levelled up through HTML, CSS, JavaScript, React, and Node.js. But what kept me hooked wasn't the frontend — it was the architecture behind the apps: how data flows, how systems scale, how you build something that holds up under real load.
                      </p>
 
                      <br />
                      <p>
-                        Over the last few years, I've moved from simple HTML pages to complex full-stack applications. It hasn't always been pretty there were plenty of broken builds and confusing error messages but every bug fixed was a lesson learned. Today, I focus on writing clean, maintainable code and building interfaces that don't confuse the user.
+                        Over the last few years I've shipped production systems with real-time collaboration, agent-orchestrated task routing, Stripe-powered payment workflows, Supabase RLS-backed multi-tenancy, and Redis rate limiting. Every broken build taught me something. Today I focus on writing code that performs, scales, and doesn't fall over when it matters.
                      </p>
                   </div>
 
@@ -92,12 +92,12 @@ export default function AboutPage() {
                         How I Work
                      </h3>
                      <p>
-                        I believe in <strong>function over flash</strong>. Animations are great, but not if the site takes 10 seconds to load. My priority is always performance, accessibility, and reliability.
+                        I start from the system design, not the UI. Before writing a line of code I think about data flow, concurrency, failure modes, and scale. Then I build outward from there.
                      </p>
                      <ul className="list-disc pl-5 space-y-2 marker:text-blue-600">
-                        <li><strong>Keep it simple:</strong> Complexity is the enemy of reliability.</li>
-                        <li><strong>User first:</strong> If it's hard to use, the code doesn't matter.</li>
-                        <li><strong>Always learning:</strong> The tech landscape changes daily. I try to keep up without getting distracted by every shiny new toy.</li>
+                        <li><strong>Performance is a feature:</strong> Latency and throughput are first-class concerns, not afterthoughts.</li>
+                        <li><strong>Resilience over convenience:</strong> Systems should degrade gracefully — not just work in the happy path.</li>
+                        <li><strong>Pragmatic, not dogmatic:</strong> The right tool for the job, not the newest one on Twitter.</li>
                      </ul>
                   </div>
 
