@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  --font-inter: 'Inter Variable', sans-serif;
+  --font-montserrat: 'Montserrat Variable', sans-serif;
+  --font-bebas: 'Bebas Neue', cursive;
+}
 
 @keyframes fadeIn {
   0% { opacity: 0 }
