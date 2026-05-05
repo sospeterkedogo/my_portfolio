@@ -6,11 +6,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    default: "Sospeter Kedogo — Software Engineer",
+    default: "Sospeter Kedogo — Software Developer",
     template: "%s | Sospeter Kedogo",
   },
   description:
-    "Full-stack software engineer based in Northampton, UK. Specialising in React, Next.js, and Node.js.",
+    "Full-stack software developer based in Northampton, UK. Building scalable, high-performance systems with Next.js, TypeScript, and Node.js.",
 };
 
 const inter = Inter({

@@ -35,6 +35,18 @@ export interface StaticProject {
 
 export const staticProjects: StaticProject[] = [
   {
+    id: "espeezy",
+    title: "Espeezy",
+    description:
+      "A student-focused workspace platform combining task coordination, real-time collaboration, social presence, creator tools, marketplace flows, and Stripe-powered payments — built as a single cohesive Next.js application.",
+    summary:
+      "Full-stack platform with Liveblocks real-time collaboration, Supabase RLS-backed multi-tenancy, Stripe checkout/billing portal, Upstash Redis rate limiting, internal agent orchestration for task routing, and Playwright test coverage. Deployed on VPS with a hardened resilient deploy pipeline.",
+    images: [],
+    github_url: "https://github.com/sospeterkedogo/espeezysourcecode",
+    tags: ["Next.js", "TypeScript", "Supabase", "Stripe", "Liveblocks", "Redis", "Playwright", "Agent Orchestration"],
+    created_at: "2026-05-01",
+  },
+  {
     id: "portfolio-site",
     title: "Personal Portfolio",
     description:
