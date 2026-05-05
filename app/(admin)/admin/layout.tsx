@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import AdminLayout from "@/app/(admin)/components/AdminLayout";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Admin Dashboard",
   description: "Admin Dashboard",
