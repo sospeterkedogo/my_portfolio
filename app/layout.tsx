@@ -1,6 +1,6 @@
 import "./globals.css";
 import { ReactNode } from "react";
-import { Inter, Montserrat, Bebas_Neue } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 
@@ -13,20 +13,25 @@ export const metadata: Metadata = {
     "Full-stack software developer based in Northampton, UK. Building scalable, high-performance systems with Next.js, TypeScript, and Node.js.",
 };
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "./fonts/inter-latin-wght-normal.woff2",
   variable: "--font-inter",
+  weight: "100 900",
+  display: "swap",
 });
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
+const montserrat = localFont({
+  src: "./fonts/montserrat-latin-wght-normal.woff2",
   variable: "--font-montserrat",
+  weight: "100 900",
+  display: "swap",
 });
 
-const bebas = Bebas_Neue({
+const bebas = localFont({
+  src: "./fonts/bebas-neue-latin-400-normal.woff2",
   weight: "400",
-  subsets: ["latin"],
   variable: "--font-bebas",
+  display: "swap",
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
